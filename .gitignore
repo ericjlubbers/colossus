@@ -1,0 +1,47 @@
+# ─── Node ─────────────────────────────────────────────────────────────────────
+node_modules/
+.pnpm-store/
+
+# ─── Build outputs ────────────────────────────────────────────────────────────
+.next/
+dist/
+out/
+build/
+
+# ─── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.venv/
+venv/
+env/
+*.egg
+
+# ─── Environment ──────────────────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ─── Expo / React Native ──────────────────────────────────────────────────────
+.expo/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+# Uncommit ios/ and android/ after `expo prebuild` if you want to track native
+android/
+ios/
+
+# ─── Turbo ────────────────────────────────────────────────────────────────────
+.turbo/
+
+# ─── Misc ─────────────────────────────────────────────────────────────────────
+.DS_Store
+*.log
+.cache/
+coverage/
