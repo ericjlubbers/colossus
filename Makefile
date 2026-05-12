@@ -3,11 +3,17 @@
 # Remote targets run on the Colossus LXC via SSH.
 # See CONNECTION.md for SSH setup.
 
-REMOTE       := colossus               # SSH host alias from ~/.ssh/config
-REMOTE_DIR   := ~/colossus             # Repo path on the LXC
-COMPOSE      := docker compose
-API_CONT     := colossus-api
-WORKER_CONT  := colossus-worker
+# SSH alias for the Proxmox host (10.0.0.41)
+PROXMOX := proxmox
+# SSH alias for the Colossus LXC
+REMOTE := colossus
+# Repo path on the LXC
+REMOTE_DIR := ~/colossus
+# LAN gateway (Xfinity router)
+COLOSSUS_GW := 10.0.0.1
+COMPOSE := docker compose
+API_CONT := colossus-api
+WORKER_CONT := colossus-worker
 
 .DEFAULT_GOAL := help
 
@@ -44,6 +50,13 @@ help:
 	@echo ""
 	@echo "  TUNNEL ─────────────────────────────────────────────────────"
 	@echo "  tunnel         SSH port-forward all services to localhost"
+	@echo ""
+	@echo "  PROXMOX (one-time infrastructure setup) ───────────────────"
+	@echo "  create-lxc     create Colossus LXC on Proxmox (COLOSSUS_IP= required)"
+	@echo "                   example: make create-lxc COLOSSUS_IP=10.0.0.50"
+	@echo "  bootstrap      install Docker + clone repo on the LXC"
+	@echo "                   example: make bootstrap COLOSSUS_REPO_URL=git@github.com:you/colossus"
+	@echo "  ssh-proxmox    open an interactive SSH session to Proxmox host"
 	@echo ""
 
 
@@ -147,6 +160,32 @@ migrate-down:
 .PHONY: migrate-history
 migrate-history:
 	ssh $(REMOTE) 'docker exec $(API_CONT) alembic history --verbose'
+
+
+# ─── Proxmox infrastructure ──────────────────────────────────────────────────
+.PHONY: create-lxc
+create-lxc:
+ifndef COLOSSUS_IP
+	$(error COLOSSUS_IP is required. Usage: make create-lxc COLOSSUS_IP=10.0.0.50)
+endif
+	@echo "[make] Uploading create-lxc.sh to Proxmox..."
+	scp scripts/create-lxc.sh $(PROXMOX):/tmp/colossus-create-lxc.sh
+	@echo "[make] Executing on Proxmox (you will be prompted for LXC root password)..."
+	ssh -t $(PROXMOX) "COLOSSUS_IP=$(COLOSSUS_IP) COLOSSUS_GW=$(COLOSSUS_GW) bash /tmp/colossus-create-lxc.sh"
+
+.PHONY: bootstrap
+bootstrap:
+ifndef COLOSSUS_REPO_URL
+	$(error COLOSSUS_REPO_URL is required. Usage: make bootstrap COLOSSUS_REPO_URL=git@github.com:you/colossus)
+endif
+	@echo "[make] Uploading bootstrap-lxc.sh to Colossus LXC..."
+	scp scripts/bootstrap-lxc.sh $(REMOTE):/tmp/colossus-bootstrap.sh
+	@echo "[make] Running bootstrap on LXC..."
+	ssh -t $(REMOTE) "COLOSSUS_REPO_URL=$(COLOSSUS_REPO_URL) bash /tmp/colossus-bootstrap.sh"
+
+.PHONY: ssh-proxmox
+ssh-proxmox:
+	ssh $(PROXMOX)
 
 
 # ─── Tunnel (all ports → localhost) ───────────────────────────────────────────
