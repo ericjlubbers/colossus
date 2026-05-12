@@ -18,6 +18,10 @@
 
 set -euo pipefail
 
+# Proxmox tools (pct, pvesm, pveam, pvesh) live in /usr/sbin which is not
+# included in PATH for non-interactive SSH sessions.
+export PATH="/usr/sbin:/usr/bin:/sbin:/bin:${PATH}"
+
 # ── Config (all overridable via env) ──────────────────────────────────────────
 LXC_IP="${COLOSSUS_IP:?Error: COLOSSUS_IP is required. e.g. COLOSSUS_IP=10.0.0.50}"
 LXC_GW="${COLOSSUS_GW:-10.0.0.1}"
