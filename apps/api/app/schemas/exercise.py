@@ -1,6 +1,7 @@
 """Pydantic v2 schemas for the Exercise domain — Phase 1."""
 
 from datetime import datetime
+from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -14,8 +15,8 @@ class ExerciseMediaOut(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
-    id: str
-    exercise_id: str
+    id: UUID
+    exercise_id: UUID
     media_type: str
     storage_path: str
     source_url: str | None = None
@@ -41,7 +42,7 @@ class ExerciseOut(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
-    id: str
+    id: UUID
     name: str
     description: str | None = None
     instructions: str | None = None
@@ -49,7 +50,7 @@ class ExerciseOut(BaseModel):
     secondary_muscles: list[str] = []
     equipment: str
     is_custom: bool
-    created_by: str | None = None
+    created_by: UUID | None = None
     created_at: datetime
     updated_at: datetime
     media: list[ExerciseMediaOut] = []
