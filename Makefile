@@ -170,8 +170,8 @@ ifndef COLOSSUS_IP
 endif
 	@echo "[make] Uploading create-lxc.sh to Proxmox..."
 	scp scripts/create-lxc.sh $(PROXMOX):/tmp/colossus-create-lxc.sh
-	@echo "[make] Executing on Proxmox (you will be prompted for LXC root password)..."
-	ssh -t $(PROXMOX) "COLOSSUS_IP=$(COLOSSUS_IP) COLOSSUS_GW=$(COLOSSUS_GW) bash /tmp/colossus-create-lxc.sh"
+	@echo "[make] Executing on Proxmox..."
+	ssh $(PROXMOX) "COLOSSUS_IP=$(COLOSSUS_IP) COLOSSUS_GW=$(COLOSSUS_GW) COLOSSUS_PW=$(COLOSSUS_PW) bash /tmp/colossus-create-lxc.sh"
 
 .PHONY: bootstrap
 bootstrap:
