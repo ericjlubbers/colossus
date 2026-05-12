@@ -47,6 +47,7 @@ help:
 	@echo "  migrate-new    create new autogenerate migration (MSG= required)"
 	@echo "  migrate-down   alembic downgrade -1"
 	@echo "  migrate-history alembic history"
+	@echo "  seed           run seed script (populate exercise library)"
 	@echo ""
 	@echo "  TUNNEL ─────────────────────────────────────────────────────"
 	@echo "  tunnel         SSH port-forward all services to localhost"
@@ -160,6 +161,10 @@ migrate-down:
 .PHONY: migrate-history
 migrate-history:
 	ssh $(REMOTE) 'docker exec $(API_CONT) alembic history --verbose'
+
+.PHONY: seed
+seed:
+	ssh $(REMOTE) 'docker exec $(API_CONT) python -m app.seed'
 
 
 # ─── Proxmox infrastructure ──────────────────────────────────────────────────

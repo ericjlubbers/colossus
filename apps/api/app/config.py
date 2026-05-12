@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     minio_password: str = "changeme"
     minio_endpoint: str = "localhost:9000"
     minio_bucket: str = "colossus"
+    minio_public_endpoint: str = ""  # Set if MinIO is behind a reverse proxy
 
     # ── JWT ───────────────────────────────────────────────────────────────────
     jwt_secret_key: str = "changeme"
