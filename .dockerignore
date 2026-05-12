@@ -1,0 +1,39 @@
+# Git
+.git
+.gitignore
+
+# Node
+node_modules
+.pnpm-store
+
+# Build artifacts
+.next
+dist
+out
+build
+.turbo
+
+# Python
+__pycache__
+*.pyc
+.venv
+venv
+
+# Expo / React Native
+.expo
+ios
+android
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Docs
+*.md
+LICENSE
+
+# Misc
+.DS_Store
+*.log
+coverage

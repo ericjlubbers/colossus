@@ -11,7 +11,9 @@ services:
     restart: unless-stopped
 
   colossus-web:
-    build: ./apps/web
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
     container_name: colossus-web
     env_file: .env
     ports:
