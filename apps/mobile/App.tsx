@@ -1,23 +1,38 @@
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
-import { Text, View } from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import ExerciseDetailScreen from "./screens/ExerciseDetailScreen";
+import ExerciseListScreen from "./screens/ExerciseListScreen";
+import type { RootStackParamList } from "./navigation/types";
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (
     <SafeAreaProvider>
-      <SafeAreaView
-        style={{ flex: 1, backgroundColor: "#000", alignItems: "center", justifyContent: "center" }}
-      >
-        <View style={{ alignItems: "center" }}>
-          <Text style={{ color: "#ffffff", fontSize: 40, fontWeight: "bold", letterSpacing: 2 }}>
-            COLOSSUS
-          </Text>
-          <Text style={{ color: "#6b7280", marginTop: 8, fontSize: 14 }}>
-            Your self-hosted fitness tracker
-          </Text>
-        </View>
-        <StatusBar style="light" />
-      </SafeAreaView>
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            headerStyle: { backgroundColor: "#000" },
+            headerTintColor: "#f9fafb",
+            headerTitleStyle: { fontWeight: "700" },
+            contentStyle: { backgroundColor: "#000" },
+          }}
+        >
+          <Stack.Screen
+            name="ExerciseList"
+            component={ExerciseListScreen}
+            options={{ title: "Exercise Library" }}
+          />
+          <Stack.Screen
+            name="ExerciseDetail"
+            component={ExerciseDetailScreen}
+            options={({ route }) => ({ title: route.params.exerciseName })}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+      <StatusBar style="light" />
     </SafeAreaProvider>
   );
 }
