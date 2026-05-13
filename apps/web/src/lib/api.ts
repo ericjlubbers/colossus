@@ -490,6 +490,9 @@ export async function reorderBlockExercisesApi(
 
 // Re-export template types
 export type {
+  Exercise,
+  MuscleGroup,
+  EquipmentType,
   WorkoutTemplate,
   WorkoutTemplateSummary,
   TemplateBlock,
