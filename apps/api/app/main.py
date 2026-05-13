@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import exercises_router
+from app.routers import exercises_router, templates_router, workouts_router
 
 app = FastAPI(
     title="Colossus API",
@@ -18,6 +18,8 @@ app.add_middleware(
 )
 
 app.include_router(exercises_router)
+app.include_router(templates_router)
+app.include_router(workouts_router)
 
 
 @app.get("/health", tags=["meta"])
